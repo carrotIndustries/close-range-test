@@ -1,0 +1,34 @@
+name: Stylecheck and CI
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  native:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install 
+      run: sudo apt-get update -y && sudo apt-get install strace
+    - name: test
+      run: strace ./close-range
+  container-arch:
+    runs-on: ubuntu-20.04
+    container: archlinux:base-devel
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install 
+      run: pacman -Sy --needed --noconfirm strace
+    - name: test
+      run: strace ./close-range
+  container-ubuntu:
+    runs-on: ubuntu-20.04
+    container: ubuntu:focal
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install 
+      run: apt-get update -y && apt-get install -y strace
+    - name: test
+      run: strace ./close-range
